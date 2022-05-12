@@ -5,6 +5,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
+		"build": "tsc",
+		"start": "node dist/server.js",
 		"dev:migrate": "nodemon src/server.ts",
 		"test": "NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test jest -i"
 	},

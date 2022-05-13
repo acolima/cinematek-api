@@ -9,3 +9,73 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id         Int    @id @default(autoincrement())
+  username   String @unique
+  password   String
+  pictureUrl String
+
+  userMovies userMovies[]
+  @@map("users")
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  @@map("categories")
+}
+
+model Genre {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  MovieGenre MovieGenre[]
+  userMovies userMovies[]
+  @@map("genres")
+}
+
+model Movie {
+  id           Int    @id @default(autoincrement())
+  tmdbId       Int
+  title        String
+  overview     String
+  posterPath   String
+  backdropPath String
+  runtime      Int
+  rating       Int
+
+  MovieGenre MovieGenre[]
+  userMovies userMovies[]
+  @@map("movies")
+}
+
+model MovieGenre {
+  id Int @id @default(autoincrement())
+
+  genreId Int
+  genres  Genre @relation(fields: [genreId], references: [id])
+
+  movieId Int
+  movies  Movie @relation(fields: [movieId], references: [id])
+
+  @@map("moviesGenres")
+}
+
+model userMovies {
+  id Int @id @default(autoincrement())
+
+  userId Int
+  users  User @relation(fields: [userId], references: [id])
+
+  categoryId Int
+  categories Genre @relation(fields: [categoryId], references: [id])
+
+  movieId Int
+  movies  Movie @relation(fields: [movieId], references: [id])
+
+  favorite Boolean @default(false)
+
+  @@map("usersMovies")
+}

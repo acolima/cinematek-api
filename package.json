@@ -8,7 +8,7 @@
 		"build": "tsc",
 		"start": "node ./dist/src/server.js",
 		"dev": "npx dotenv -e .env.dev prisma migrate dev && nodemon src/server.ts",
-		"test": "NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test jest -i",
+		"test": "npx dotenv -e .env.test prisma migrate dev && NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test jest -i",
 		"test:coverage": "NODE_OPTIONS=--experimental-vm-modules npx dotenv -e .env.test jest --coverage"
 	},
 	"keywords": [],

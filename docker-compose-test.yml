@@ -1,15 +1,13 @@
 version: '3'
 services:
-  database:
+  db:
     image: postgres
-    container_name: database
+    container_name: db
     restart: always
     ports:
       - 2345:5432
     env_file:
-      - .env.dev
-    volumes:
-      - pg:/var/lib/postgresql/data
+      - .env.test
 
   node_app:
     container_name: node_app
@@ -17,12 +15,6 @@ services:
     ports:
       - 5000:5000
     env_file:
-      - .env.dev
+      - .env.test
     depends_on:
-      - database
-    volumes:
-      - .:/usr/src
-      - /usr/src/node_modules
-
-volumes:
-  pg:
+      - db

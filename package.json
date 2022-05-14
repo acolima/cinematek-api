@@ -7,8 +7,9 @@
 	"scripts": {
 		"build": "tsc",
 		"start": "node ./dist/src/server.js",
-		"dev": "npx prisma migrate dev && nodemon src/server.ts",
-		"test": "NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test jest -i"
+		"dev": "npx dotenv -e .env.dev prisma migrate dev && nodemon src/server.ts",
+		"test": "npx dotenv -e .env.test prisma migrate dev && NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test jest -i",
+		"test:coverage": "NODE_OPTIONS=--experimental-vm-modules npx dotenv -e .env.test jest --coverage"
 	},
 	"keywords": [],
 	"author": "",
@@ -28,6 +29,7 @@
 		"typescript": "^4.6.3"
 	},
 	"devDependencies": {
+		"@faker-js/faker": "^6.3.1",
 		"@types/bcrypt": "^5.0.0",
 		"@types/cors": "^2.8.12",
 		"@types/express": "^4.17.13",
@@ -38,8 +40,5 @@
 		"prisma": "^3.12.0",
 		"supertest": "^6.2.3",
 		"ts-jest": "^27.1.4"
-	},
-	"prisma": {
-		"seed": "ts-node prisma/seed.ts"
 	}
 }

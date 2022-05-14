@@ -1,5 +1,5 @@
 import { User } from '@prisma/client'
-import * as userRepository from '../repositories/userRepository.js'
+import { userRepository } from '../repositories/userRepository.js'
 import * as error from '../utils/errorUtils.js'
 
 import bcrypt from 'bcrypt'
@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken'
 
 export type UserLogin = Omit<User, 'id' | 'pictureUrl'>
 
-export async function signIn(body: UserLogin) {
+async function signIn(body: UserLogin) {
 	const { username, password } = body
 
 	const user = await userRepository.findByUsername(username)
@@ -25,4 +25,8 @@ export async function signIn(body: UserLogin) {
 	const token = jwt.sign(data, secret)
 
 	return { username, pictureUrl: user.pictureUrl, token }
+}
+
+export const authService = {
+	signIn
 }

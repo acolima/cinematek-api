@@ -18,6 +18,11 @@ async function createUser(user: CreateUser) {
 	await userRepository.create({ ...user, password: hashedPassword })
 }
 
+async function findById(id: number) {
+	userRepository.findById(id)
+}
+
 export const userService = {
-	createUser
+	createUser,
+	findById
 }

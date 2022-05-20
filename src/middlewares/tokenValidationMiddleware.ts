@@ -21,7 +21,7 @@ export async function tokenValidation(
 
 	const user = await userService.findById(userId)
 
-	res.locals.user = user
+	res.locals.userId = user.id
 
 	next()
 }

@@ -19,7 +19,7 @@ async function createUser(user: CreateUser) {
 }
 
 async function findById(id: number) {
-	userRepository.findById(id)
+	return await userRepository.findById(id)
 }
 
 export const userService = {

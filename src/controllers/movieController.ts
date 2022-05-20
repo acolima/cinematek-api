@@ -18,7 +18,7 @@ async function addOrUpdateMovie(req: Request, res: Response) {
 		actionStatus
 	)
 
-	res.sendStatus(200)
+	res.sendStatus(201)
 }
 
 export const movieController = {

@@ -1,20 +1,25 @@
 import supertest from 'supertest'
 import { prisma } from '../../src/db.js'
 import app from '../../src/index.js'
+import { movieBodyFactory } from '../factories/movieBodyFactory.js'
+import { movieFactory } from '../factories/movieFactory.js'
 import { tokenFactory } from '../factories/tokenFactory.js'
 import { userBodyFactory } from '../factories/userBodyFactory.js'
 import { userFactory } from '../factories/userFactory.js'
 
 describe('App integration tests', () => {
-	beforeEach(async () => await prisma.$executeRaw`TRUNCATE TABLE users CASCADE`)
+	beforeEach(async () => {
+		await prisma.$executeRaw`TRUNCATE TABLE users CASCADE`
+		await prisma.$executeRaw`TRUNCATE TABLE movies CASCADE`
+	})
 
 	afterAll(async () => prisma.$disconnect)
 
-	describe('POST /sign-up test', () => {
+	describe('POST /register test', () => {
 		it('should return status 201 and persist user given valid body', async () => {
 			const user = userBodyFactory()
 
-			const result = await supertest(app).post('/sign-up').send(user)
+			const result = await supertest(app).post('/register').send(user)
 
 			const userCreated = await prisma.user.findUnique({
 				where: { username: user.username }
@@ -39,15 +44,51 @@ describe('App integration tests', () => {
 		})
 	})
 
-	describe('POST /sign-out test', () => {
-		it('should return status 200 given valid token', async () => {
+	describe('POST /token test', () => {
+		it('should return status 200 given valid credentials', async () => {
 			const token = await tokenFactory()
 
 			const result = await supertest(app)
-				.post('/sign-out')
+				.post('/token')
 				.set('Authorization', `Bearer ${token}`)
 
 			expect(result.status).toEqual(200)
+		})
+	})
+
+	describe('GET /users/movies/:movieId', () => {
+		it('should return status 200 and an object given valid credentials', async () => {
+			const movie = movieBodyFactory()
+			await movieFactory(movie)
+
+			const token = await tokenFactory()
+
+			const result = await supertest(app)
+				.get(`/users/movies/${movie.tmdbId}`)
+				.set('Authorization', `Bearer ${token}`)
+
+			expect(result.status).toEqual(200)
+			expect(result.body.length).toBeGreaterThanOrEqual(0)
+		})
+	})
+
+	describe('POST /movies/:id/:action/:status', () => {
+		it('should return status 201 and persist movie given valid credentials', async () => {
+			const movie = movieBodyFactory()
+
+			const token = await tokenFactory()
+
+			const result = await supertest(app)
+				.post(`/movies/${movie.tmdbId}/watched/true`)
+				.send({ title: movie.title, posterPath: movie.posterPath })
+				.set('Authorization', `Bearer ${token}`)
+
+			const createdMovie = await prisma.movie.findUnique({
+				where: { tmdbId: movie.tmdbId }
+			})
+
+			expect(result.status).toEqual(201)
+			expect(createdMovie).not.toBe(null)
 		})
 	})
 })

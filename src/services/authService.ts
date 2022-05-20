@@ -19,7 +19,7 @@ async function signIn(body: UserLogin) {
 		throw error.unauthorized('Incorrect username or password')
 	}
 
-	const data = { id: user.id }
+	const data = { userId: user.id }
 	const secret = process.env.JWT_SECRET
 
 	const token = jwt.sign(data, secret)

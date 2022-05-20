@@ -8,6 +8,6 @@ import { authSchema } from '../schemas/authSchema.js'
 const authRouter = Router()
 
 authRouter.post('/sign-in', schemaValidation(authSchema), authController.signIn)
-authRouter.post('/sign-out', tokenValidation, (req, res) => res.send('ok'))
+authRouter.post('/token', tokenValidation, (req, res) => res.send('ok'))
 
 export default authRouter

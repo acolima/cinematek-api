@@ -20,62 +20,26 @@ model User {
   @@map("users")
 }
 
-model Category {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-
-  @@map("categories")
-}
-
-model Genre {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-
-  MovieGenre MovieGenre[]
-  userMovies userMovies[]
-  @@map("genres")
-}
-
 model Movie {
-  id           Int    @id @default(autoincrement())
-  tmdbId       Int
-  title        String
-  overview     String
-  posterPath   String
-  backdropPath String
-  runtime      Int
-  rating       Int
+  tmdbId     Int    @id
+  title      String
+  posterPath String
 
-  MovieGenre MovieGenre[]
   userMovies userMovies[]
   @@map("movies")
 }
 
-model MovieGenre {
-  id Int @id @default(autoincrement())
-
-  genreId Int
-  genres  Genre @relation(fields: [genreId], references: [id])
-
-  movieId Int
-  movies  Movie @relation(fields: [movieId], references: [id])
-
-  @@map("moviesGenres")
-}
-
 model userMovies {
-  id Int @id @default(autoincrement())
+  movieId Int
+  movies  Movie @relation(fields: [movieId], references: [tmdbId])
 
   userId Int
   users  User @relation(fields: [userId], references: [id])
 
-  categoryId Int
-  categories Genre @relation(fields: [categoryId], references: [id])
+  favorite  Boolean @default(false)
+  watched   Boolean @default(false)
+  watchlist Boolean @default(false)
 
-  movieId Int
-  movies  Movie @relation(fields: [movieId], references: [id])
-
-  favorite Boolean @default(false)
-
+  @@id([movieId, userId])
   @@map("usersMovies")
 }

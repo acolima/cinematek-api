@@ -73,6 +73,14 @@ async function getUserMovies(id: number, filter: string) {
 	})
 }
 
+async function removeUserMovie(movieId: number) {
+	return await prisma.userMovies.delete({
+		where: {
+			id: movieId
+		}
+	})
+}
+
 export const movieRepository = {
 	createUserMovie,
 	findById,
@@ -80,5 +88,6 @@ export const movieRepository = {
 	getUserMovie,
 	getUserMovies,
 	insert,
+	removeUserMovie,
 	updateUserMovie
 }

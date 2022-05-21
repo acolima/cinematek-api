@@ -23,7 +23,18 @@ async function upsertMovie(
 		return
 	}
 
-	await movieRepository.updateUserMovie(userMovie.id, action, status)
+	const movieUpdated = await movieRepository.updateUserMovie(
+		userMovie.id,
+		action,
+		status
+	)
+
+	if (
+		!movieUpdated.favorite &&
+		!movieUpdated.watched &&
+		!movieUpdated.watchlist
+	)
+		await movieRepository.removeUserMovie(movieUpdated.id)
 }
 
 async function getUserMovie(id: number, movieId: number) {

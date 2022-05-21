@@ -8,16 +8,6 @@ async function signUp(req: Request, res: Response) {
 	res.sendStatus(201)
 }
 
-async function getMovie(req: Request, res: Response) {
-	const { userId } = res.locals
-	const { movieId } = req.params
-
-	const movies = await movieService.getUserMovie(+userId, +movieId)
-
-	res.send(movies)
-}
-
 export const userController = {
-	getMovie,
 	signUp
 }

@@ -16,15 +16,14 @@ async function upsertMovie(
 		await movieRepository.insert(movieData, movieId)
 	}
 
-	const teste = await movieRepository.getUserMovie(userId, movieId)
-	console.log(teste)
+	const userMovie = await movieRepository.getUserMovie(userId, movieId)
 
-	if (!teste) {
+	if (!userMovie) {
 		await movieRepository.createUserMovie(movieId, userId, action, status)
 		return
 	}
 
-	await movieRepository.updateUserMovie(teste.id, action, status)
+	await movieRepository.updateUserMovie(userMovie.id, action, status)
 }
 
 async function getUserMovie(id: number, movieId: number) {

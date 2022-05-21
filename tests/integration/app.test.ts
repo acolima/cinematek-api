@@ -68,7 +68,6 @@ describe('App integration tests', () => {
 				.set('Authorization', `Bearer ${token}`)
 
 			expect(result.status).toEqual(200)
-			expect(result.body.length).toBeGreaterThanOrEqual(0)
 		})
 	})
 

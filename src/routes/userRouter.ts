@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { movieController } from '../controllers/movieController.js'
 import { userController } from '../controllers/userController.js'
 import { schemaValidation } from '../middlewares/schemaValidationMiddleware.js'
 import { tokenValidation } from '../middlewares/tokenValidationMiddleware.js'
@@ -15,7 +16,13 @@ userRouter.post(
 userRouter.get(
 	'/users/movies/:movieId',
 	tokenValidation,
-	userController.getMovie
+	movieController.getMovie
+)
+
+userRouter.get(
+	'/users/movies/list/:filter',
+	tokenValidation,
+	movieController.getUserMovies
 )
 
 export default userRouter

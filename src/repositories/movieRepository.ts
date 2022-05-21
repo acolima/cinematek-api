@@ -25,32 +25,34 @@ async function findUserMovie(movieId: number, userId: number) {
 	})
 }
 
-async function upsertUserMovie(
+async function createUserMovie(
 	movieId: number,
 	userId: number,
 	action: string,
 	status: boolean
 ) {
-	return await prisma.userMovies.upsert({
-		where: {
-			movieId_userId: {
-				movieId,
-				userId
-			}
-		},
-		create: {
+	return await prisma.userMovies.create({
+		data: {
 			movieId,
 			userId,
 			[action]: status
+		}
+	})
+}
+
+async function updateUserMovie(id: number, action: string, status: boolean) {
+	return await prisma.userMovies.update({
+		where: {
+			id
 		},
-		update: {
+		data: {
 			[action]: status
 		}
 	})
 }
 
 async function getUserMovie(id: number, movieId: number) {
-	return await prisma.userMovies.findMany({
+	return await prisma.userMovies.findFirst({
 		where: {
 			userId: id,
 			movieId: movieId
@@ -58,10 +60,25 @@ async function getUserMovie(id: number, movieId: number) {
 	})
 }
 
+async function getUserMovies(id: number, filter: string) {
+	return await prisma.userMovies.findMany({
+		where: {
+			userId: id,
+			[filter]: true
+		},
+		select: {
+			id: true,
+			movies: true
+		}
+	})
+}
+
 export const movieRepository = {
+	createUserMovie,
 	findById,
 	findUserMovie,
 	getUserMovie,
+	getUserMovies,
 	insert,
-	upsertUserMovie
+	updateUserMovie
 }

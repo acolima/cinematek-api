@@ -80,50 +80,10 @@ async function removeUserMovie(movieId: number) {
 	})
 }
 
-async function getLists(userId: number) {
-	return await prisma.list.findMany({
-		where: {
-			userId
-		},
-		select: {
-			id: true,
-			name: true,
-			listMovies: {
-				select: {
-					movies: true
-				}
-			}
-		}
-	})
-}
-
-async function createList(userId: number, name: string) {
-	const list = await prisma.list.create({
-		data: {
-			name,
-			userId
-		}
-	})
-
-	return list
-}
-
-async function addMovieToList(listId: number, movieId: number) {
-	return await prisma.listMovies.create({
-		data: {
-			listId,
-			movieId
-		}
-	})
-}
-
 export const movieRepository = {
-	addMovieToList,
-	createList,
 	createUserMovie,
 	findById,
 	findUserMovie,
-	getLists,
 	getUserMovie,
 	getUserMovies,
 	removeUserMovie,

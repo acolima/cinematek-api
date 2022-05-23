@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { listController } from '../controllers/listController.js'
 import { movieController } from '../controllers/movieController.js'
 import { userController } from '../controllers/userController.js'
 import { schemaValidation } from '../middlewares/schemaValidationMiddleware.js'
@@ -21,8 +22,14 @@ userRouter.get(
 	movieController.getUserMovies
 )
 
-userRouter.get('/lists', tokenValidation, movieController.getLists)
+userRouter.get('/lists', tokenValidation, listController.getLists)
 
-userRouter.post('/lists/create', tokenValidation, movieController.createList)
+userRouter.post('/lists/create', tokenValidation, listController.createList)
+
+userRouter.delete(
+	'/lists/:id/delete',
+	tokenValidation,
+	listController.deleteList
+)
 
 export default userRouter

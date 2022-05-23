@@ -56,7 +56,7 @@ model List {
 model ListMovies {
   id      Int   @id @default(autoincrement())
   listId  Int
-  lists   List  @relation(fields: [listId], references: [id])
+  lists   List  @relation(fields: [listId], references: [id], onDelete: Cascade)
   movieId Int
   movies  Movie @relation(fields: [movieId], references: [tmdbId])
 

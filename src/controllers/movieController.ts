@@ -6,8 +6,6 @@ async function addOrUpdateMovie(req: Request, res: Response) {
 	const movieData = req.body
 	const { userId } = res.locals
 
-	console.log(movieData)
-
 	let actionStatus = false
 
 	if (status === 'true') actionStatus = true
@@ -34,27 +32,8 @@ async function getUserMovies(req: Request, res: Response) {
 	res.send(movies)
 }
 
-async function getLists(req: Request, res: Response) {
-	const { userId } = res.locals
-
-	const lists = await movieService.getLists(userId)
-
-	res.send(lists)
-}
-
-async function createList(req: Request, res: Response) {
-	const { userId } = res.locals
-	const { name, movies } = req.body
-
-	await movieService.createList(userId, name, movies)
-
-	res.sendStatus(201)
-}
-
 export const movieController = {
 	addOrUpdateMovie,
-	createList,
-	getLists,
 	getMovie,
 	getUserMovies
 }

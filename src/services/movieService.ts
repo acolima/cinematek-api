@@ -42,24 +42,7 @@ async function getUserMovies(id: number, filter: string) {
 	return await movieRepository.getUserMovies(id, filter)
 }
 
-async function getLists(userId: number) {
-	const lists = await movieRepository.getLists(userId)
-	return lists
-}
-
-async function createList(userId: number, name: string, movies: Movie[]) {
-	const list = await movieRepository.createList(userId, name)
-
-	for (const movie of movies) await movieRepository.upsert(movie)
-
-	movies.map(async (movie) => {
-		await movieRepository.addMovieToList(list.id, movie.tmdbId)
-	})
-}
-
 export const movieService = {
-	createList,
-	getLists,
 	getUserMovie,
 	getUserMovies,
 	upsertMovie

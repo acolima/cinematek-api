@@ -13,16 +13,16 @@ userRouter.post(
 	userController.signUp
 )
 
-userRouter.get(
-	'/users/movies/:movieId',
-	tokenValidation,
-	movieController.getMovie
-)
+userRouter.get('/movies/:movieId', tokenValidation, movieController.getMovie)
 
 userRouter.get(
-	'/users/movies/list/:filter',
+	'/movies/list/:filter',
 	tokenValidation,
 	movieController.getUserMovies
 )
+
+userRouter.get('/lists', tokenValidation, movieController.getLists)
+
+userRouter.post('/lists/create', tokenValidation, movieController.createList)
 
 export default userRouter

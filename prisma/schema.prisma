@@ -14,6 +14,7 @@ model User {
   pictureUrl String
   userMovies userMovies[]
 
+  List List[]
   @@map("users")
 }
 
@@ -22,6 +23,8 @@ model Movie {
   title      String
   posterPath String
   userMovies userMovies[]
+
+  listMovies ListMovies[]
 
   @@map("movies")
 }
@@ -37,4 +40,25 @@ model userMovies {
   users     User    @relation(fields: [userId], references: [id])
 
   @@map("usersMovies")
+}
+
+model List {
+  id     Int    @id @default(autoincrement())
+  name   String
+  userId Int
+  users  User   @relation(fields: [userId], references: [id])
+
+  listMovies ListMovies[]
+
+  @@map("lists")
+}
+
+model ListMovies {
+  id      Int   @id @default(autoincrement())
+  listId  Int
+  lists   List  @relation(fields: [listId], references: [id])
+  movieId Int
+  movies  Movie @relation(fields: [movieId], references: [tmdbId])
+
+  @@map("listMovies")
 }

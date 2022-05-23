@@ -7,6 +7,6 @@ const router = Router()
 
 router.use(authRouter)
 router.use(movieRouter)
-router.use(userRouter)
+router.use('/users', userRouter)
 
 export default router

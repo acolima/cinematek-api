@@ -6,7 +6,9 @@ export async function tokenFactory() {
 	const user = userBodyFactory()
 	const createdUser = await userFactory(user)
 
-	const token = jwt.sign({ userId: createdUser.id }, process.env.JWT_SECRET)
+	const token = jwt.sign({ userId: createdUser.id }, process.env.JWT_SECRET, {
+		expiresIn: 60 * 60 * 24
+	})
 
 	return token
 }

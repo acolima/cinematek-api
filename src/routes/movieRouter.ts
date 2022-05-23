@@ -5,7 +5,7 @@ import { tokenValidation } from '../middlewares/tokenValidationMiddleware.js'
 const movieRouter = Router()
 
 movieRouter.post(
-	'/movies/:id/:action/:status',
+	'/movies/:action/:status',
 	tokenValidation,
 	movieController.addOrUpdateMovie
 )

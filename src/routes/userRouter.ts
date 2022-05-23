@@ -25,4 +25,12 @@ userRouter.get(
 	movieController.getUserMovies
 )
 
+userRouter.get('/users/lists', tokenValidation, movieController.getLists)
+
+userRouter.post(
+	'/users/lists/create',
+	tokenValidation,
+	movieController.createList
+)
+
 export default userRouter

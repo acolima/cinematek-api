@@ -1,25 +1,22 @@
 import { Movie } from '@prisma/client'
 import { movieRepository } from '../repositories/movieRepository.js'
 
-export type NewMovie = Omit<Movie, 'tmdbId'>
-
 async function upsertMovie(
-	movieId: number,
 	userId: number,
-	movieData: NewMovie,
+	movieData: Movie,
 	action: string,
 	status: boolean
 ) {
-	const movie = await movieRepository.findById(movieId)
+	const { tmdbId } = movieData
 
-	if (!movie) {
-		await movieRepository.insert(movieData, movieId)
-	}
+	await movieRepository.findById(tmdbId)
 
-	const userMovie = await movieRepository.getUserMovie(userId, movieId)
+	await movieRepository.upsert(movieData)
+
+	const userMovie = await movieRepository.getUserMovie(userId, tmdbId)
 
 	if (!userMovie) {
-		await movieRepository.createUserMovie(movieId, userId, action, status)
+		await movieRepository.createUserMovie(tmdbId, userId, action, status)
 		return
 	}
 
@@ -45,7 +42,24 @@ async function getUserMovies(id: number, filter: string) {
 	return await movieRepository.getUserMovies(id, filter)
 }
 
+async function getLists(userId: number) {
+	const lists = await movieRepository.getLists(userId)
+	return lists
+}
+
+async function createList(userId: number, name: string, movies: Movie[]) {
+	const list = await movieRepository.createList(userId, name)
+
+	for (const movie of movies) await movieRepository.upsert(movie)
+
+	movies.map(async (movie) => {
+		await movieRepository.addMovieToList(list.id, movie.tmdbId)
+	})
+}
+
 export const movieService = {
+	createList,
+	getLists,
 	getUserMovie,
 	getUserMovies,
 	upsertMovie

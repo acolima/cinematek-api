@@ -1,5 +1,5 @@
+import { Movie } from '@prisma/client'
 import { prisma } from '../db.js'
-import { NewMovie } from '../services/movieService.js'
 
 async function findById(id: number) {
 	return await prisma.movie.findFirst({
@@ -7,12 +7,11 @@ async function findById(id: number) {
 	})
 }
 
-async function insert(data: NewMovie, tmdbId: number) {
-	return await prisma.movie.create({
-		data: {
-			...data,
-			tmdbId
-		}
+async function upsert(movieData: Movie) {
+	return await prisma.movie.upsert({
+		where: { tmdbId: movieData.tmdbId },
+		update: {},
+		create: movieData
 	})
 }
 
@@ -81,13 +80,53 @@ async function removeUserMovie(movieId: number) {
 	})
 }
 
+async function getLists(userId: number) {
+	return await prisma.list.findMany({
+		where: {
+			userId
+		},
+		select: {
+			id: true,
+			name: true,
+			listMovies: {
+				select: {
+					movies: true
+				}
+			}
+		}
+	})
+}
+
+async function createList(userId: number, name: string) {
+	const list = await prisma.list.create({
+		data: {
+			name,
+			userId
+		}
+	})
+
+	return list
+}
+
+async function addMovieToList(listId: number, movieId: number) {
+	return await prisma.listMovies.create({
+		data: {
+			listId,
+			movieId
+		}
+	})
+}
+
 export const movieRepository = {
+	addMovieToList,
+	createList,
 	createUserMovie,
 	findById,
 	findUserMovie,
+	getLists,
 	getUserMovie,
 	getUserMovies,
-	insert,
 	removeUserMovie,
-	updateUserMovie
+	updateUserMovie,
+	upsert
 }

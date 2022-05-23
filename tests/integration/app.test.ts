@@ -15,11 +15,11 @@ describe('App integration tests', () => {
 
 	afterAll(async () => prisma.$disconnect)
 
-	describe('POST /register test', () => {
+	describe('POST /users/register test', () => {
 		it('should return status 201 and persist user given valid body', async () => {
 			const user = userBodyFactory()
 
-			const result = await supertest(app).post('/register').send(user)
+			const result = await supertest(app).post('/users/register').send(user)
 
 			const userCreated = await prisma.user.findUnique({
 				where: { username: user.username }
@@ -71,15 +71,15 @@ describe('App integration tests', () => {
 		})
 	})
 
-	describe('POST /movies/:id/:action/:status', () => {
+	describe('POST /movies/:action/:status', () => {
 		it('should return status 201 and persist movie given valid credentials', async () => {
 			const movie = movieBodyFactory()
 
 			const token = await tokenFactory()
 
 			const result = await supertest(app)
-				.post(`/movies/${movie.tmdbId}/watched/true`)
-				.send({ title: movie.title, posterPath: movie.posterPath })
+				.post(`/movies/watched/true`)
+				.send(movie)
 				.set('Authorization', `Bearer ${token}`)
 
 			const createdMovie = await prisma.movie.findUnique({

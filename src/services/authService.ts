@@ -22,7 +22,7 @@ async function signIn(body: UserLogin) {
 	const data = { userId: user.id }
 	const secret = process.env.JWT_SECRET
 
-	const token = jwt.sign(data, secret)
+	const token = jwt.sign(data, secret, { expiresIn: 60 * 60 * 24 })
 
 	return { username, pictureUrl: user.pictureUrl, token }
 }

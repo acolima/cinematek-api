@@ -72,6 +72,21 @@ async function getUserMovies(id: number, filter: string) {
 	})
 }
 
+async function getMovies(id: number) {
+	return await prisma.userMovies.findMany({
+		where: {
+			userId: id
+		},
+		select: {
+			id: true,
+			favorite: true,
+			watchlist: true,
+			watched: true,
+			movies: true
+		}
+	})
+}
+
 async function removeUserMovie(movieId: number) {
 	return await prisma.userMovies.delete({
 		where: {
@@ -84,6 +99,7 @@ export const movieRepository = {
 	createUserMovie,
 	findById,
 	findUserMovie,
+	getMovies,
 	getUserMovie,
 	getUserMovies,
 	removeUserMovie,

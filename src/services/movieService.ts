@@ -38,11 +38,16 @@ async function getUserMovie(id: number, movieId: number) {
 	return await movieRepository.getUserMovie(id, movieId)
 }
 
+async function getMovies(id: number) {
+	return await movieRepository.getMovies(id)
+}
+
 async function getUserMovies(id: number, filter: string) {
 	return await movieRepository.getUserMovies(id, filter)
 }
 
 export const movieService = {
+	getMovies,
 	getUserMovie,
 	getUserMovies,
 	upsertMovie

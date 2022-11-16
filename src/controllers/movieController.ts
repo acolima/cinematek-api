@@ -15,6 +15,13 @@ async function addOrUpdateMovie(req: Request, res: Response) {
 	res.sendStatus(201)
 }
 
+async function getMovies(req: Request, res: Response) {
+	const { userId } = res.locals
+
+	const movies = await movieService.getMovies(userId)
+	res.send(movies)
+}
+
 async function getMovie(req: Request, res: Response) {
 	const { userId } = res.locals
 	const { movieId } = req.params
@@ -35,5 +42,6 @@ async function getUserMovies(req: Request, res: Response) {
 export const movieController = {
 	addOrUpdateMovie,
 	getMovie,
+	getMovies,
 	getUserMovies
 }

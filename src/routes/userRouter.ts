@@ -16,6 +16,8 @@ userRouter.post(
 
 userRouter.get('/movies/:movieId', tokenValidation, movieController.getMovie)
 
+userRouter.get('/movies', tokenValidation, movieController.getMovies)
+
 userRouter.get(
 	'/movies/list/:filter',
 	tokenValidation,

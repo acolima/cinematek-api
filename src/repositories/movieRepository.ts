@@ -67,7 +67,7 @@ async function getUserMovies(id: number, filter: string) {
 		},
 		select: {
 			id: true,
-			movies: true
+			movie: true
 		}
 	})
 }
@@ -82,7 +82,8 @@ async function getMovies(id: number) {
 			favorite: true,
 			watchlist: true,
 			watched: true,
-			movies: true
+			movie: true,
+			modifyAt: true
 		}
 	})
 }

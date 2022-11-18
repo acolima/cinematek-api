@@ -20,10 +20,11 @@ model User {
 }
 
 model Movie {
-  tmdbId     Int          @id
-  title      String
-  posterPath String
-  userMovies userMovies[]
+  tmdbId       Int          @id
+  title        String
+  posterPath   String
+  backdropPath String?
+  userMovies   userMovies[]
 
   listMovies ListMovies[]
 

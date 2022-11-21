@@ -45,7 +45,8 @@ async function updateUserMovie(id: number, action: string, status: boolean) {
 			id
 		},
 		data: {
-			[action]: status
+			[action]: status,
+			modifyAt: new Date()
 		}
 	})
 }
@@ -84,6 +85,9 @@ async function getMovies(id: number) {
 			watched: true,
 			movie: true,
 			modifyAt: true
+		},
+		orderBy: {
+			modifyAt: 'desc'
 		}
 	})
 }

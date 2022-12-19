@@ -40,13 +40,24 @@ async function createUserMovie(
 }
 
 async function updateUserMovie(id: number, action: string, status: boolean) {
+	if (action === 'watched') {
+		return await prisma.userMovies.update({
+			where: {
+				id
+			},
+			data: {
+				[action]: status,
+				modifyAt: new Date()
+			}
+		})
+	}
+
 	return await prisma.userMovies.update({
 		where: {
 			id
 		},
 		data: {
-			[action]: status,
-			modifyAt: new Date()
+			[action]: status
 		}
 	})
 }

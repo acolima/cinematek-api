@@ -15,20 +15,20 @@ describe('App integration tests', () => {
 
 	afterAll(async () => prisma.$disconnect)
 
-	describe('POST /users/register test', () => {
-		it('should return status 201 and persist user given valid body', async () => {
-			const user = userBodyFactory()
+	// describe('POST /users/register test', () => {
+	// 	it('should return status 201 and persist user given valid body', async () => {
+	// 		const user = userBodyFactory()
 
-			const result = await supertest(app).post('/users/register').send(user)
+	// 		const result = await supertest(app).post('/users/register').send(user)
 
-			const userCreated = await prisma.user.findUnique({
-				where: { username: user.username }
-			})
+	// 		const userCreated = await prisma.user.findUnique({
+	// 			where: { username: user.username }
+	// 		})
 
-			expect(result.status).toEqual(201)
-			expect(userCreated).not.toBe(null)
-		})
-	})
+	// 		expect(result.status).toEqual(201)
+	// 		expect(userCreated).not.toBe(null)
+	// 	})
+	// })
 
 	describe('POST /sign-in test', () => {
 		it('should return status 200 and credentials given valid body', async () => {

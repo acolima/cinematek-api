@@ -3,7 +3,10 @@ import { userService } from '../services/userService.js'
 import { movieService } from '../services/movieService.js'
 
 async function signUp(req: Request, res: Response) {
-	await userService.createUser(req.body)
+	const { body } = res.locals
+	const file = req.file
+
+	await userService.createUser(body, file)
 
 	res.sendStatus(201)
 }

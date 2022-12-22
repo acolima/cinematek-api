@@ -5,11 +5,13 @@ import { userController } from '../controllers/userController.js'
 import { schemaValidation } from '../middlewares/schemaValidationMiddleware.js'
 import { tokenValidation } from '../middlewares/tokenValidationMiddleware.js'
 import { userSchema } from '../schemas/userSchema.js'
+import { upload } from '../storage.js'
 
 const userRouter = Router()
 
 userRouter.post(
 	'/register',
+	upload.single('file'),
 	schemaValidation(userSchema),
 	userController.signUp
 )

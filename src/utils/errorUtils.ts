@@ -1,5 +1,10 @@
 export interface AppError {
-	type: 'conflict' | 'unprocessable_entity' | 'unauthorized' | 'not_found'
+	type:
+		| 'conflict'
+		| 'unprocessable_entity'
+		| 'unauthorized'
+		| 'not_found'
+		| 'storage_error'
 	message: string
 }
 
@@ -17,4 +22,8 @@ export function unauthorized(message: string): AppError {
 
 export function notFound(message: string): AppError {
 	return { type: 'not_found', message }
+}
+
+export function storageError(message: string): AppError {
+	return { type: 'storage_error', message }
 }

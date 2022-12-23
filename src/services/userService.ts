@@ -15,9 +15,13 @@ async function createUser(user: CreateUser, pictureFile: Express.Multer.File) {
 		throw error.conflict('This username is already taken')
 	}
 
+	if (!pictureFile) {
+		throw error.unprocessableEntity('There is no file for the profile picture')
+	}
+
 	const fileType = pictureFile.mimetype.split('/')[0]
 
-	if (pictureFile && fileType === 'image') {
+	if (fileType === 'image') {
 		const fileExtension = pictureFile.originalname.split('.')[1]
 		const fileName = nanoid()
 		const filePath = `${fileName}.${fileExtension}`
@@ -46,7 +50,7 @@ async function createUser(user: CreateUser, pictureFile: Express.Multer.File) {
 
 		await userRepository.create(newUser)
 	} else {
-		throw error.unprocessableEntity('There is no file for the cover')
+		throw error.unprocessableEntity('This type of file is not acceptable')
 	}
 }
 

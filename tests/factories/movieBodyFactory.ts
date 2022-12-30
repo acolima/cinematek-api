@@ -1,5 +1,5 @@
-import { faker } from '@faker-js/faker'
-import { Movie } from '@prisma/client'
+import { faker } from "@faker-js/faker";
+import { Movie } from "@prisma/client";
 
 export function movieBodyFactory() {
 	const body: Movie = {
@@ -7,6 +7,6 @@ export function movieBodyFactory() {
 		title: faker.lorem.words(3),
 		posterPath: faker.internet.url(),
 		backdropPath: faker.internet.url()
-	}
-	return body
+	};
+	return body;
 }

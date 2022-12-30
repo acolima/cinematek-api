@@ -1,64 +1,64 @@
-import bcrypt from 'bcrypt'
-import { nanoid } from 'nanoid'
-import { User } from '@prisma/client'
-import { userRepository } from '../repositories/userRepository.js'
-import * as error from '../utils/errorUtils.js'
-import { supabase } from '../supabase.js'
+import bcrypt from "bcrypt";
+import { nanoid } from "nanoid";
+import { User } from "@prisma/client";
+import { userRepository } from "../repositories/userRepository.js";
+import * as error from "../utils/errorUtils.js";
+import { supabase } from "../supabase.js";
 
-export type CreateUser = Omit<User, 'id'>
+export type CreateUser = Omit<User, "id">;
 
 async function createUser(user: CreateUser, pictureFile: Express.Multer.File) {
-	const { username, password } = user
+	const { username, password } = user;
 
-	const isUsernameTaken = await userRepository.findByUsername(username)
+	const isUsernameTaken = await userRepository.findByUsername(username);
 	if (isUsernameTaken) {
-		throw error.conflict('This username is already taken')
+		throw error.conflict("This username is already taken");
 	}
 
 	if (!pictureFile) {
-		throw error.unprocessableEntity('There is no file for the profile picture')
+		throw error.unprocessableEntity("There is no file for the profile picture");
 	}
 
-	const fileType = pictureFile.mimetype.split('/')[0]
+	const fileType = pictureFile.mimetype.split("/")[0];
 
-	if (fileType === 'image') {
-		const fileExtension = pictureFile.originalname.split('.')[1]
-		const fileName = nanoid()
-		const filePath = `${fileName}.${fileExtension}`
+	if (fileType === "image") {
+		const fileExtension = pictureFile.originalname.split(".")[1];
+		const fileName = nanoid();
+		const filePath = `${fileName}.${fileExtension}`;
 
 		const { data: storageData, error: storageError } = await supabase.storage
-			.from('public')
+			.from("public")
 			.upload(filePath, pictureFile.buffer, {
 				upsert: true
-			})
+			});
 
 		if (storageError || !storageData) {
-			throw error.storageError(storageError.message)
+			throw error.storageError(storageError.message);
 		}
 
 		const {
 			data: { publicUrl }
-		} = supabase.storage.from('public').getPublicUrl(storageData.path)
+		} = supabase.storage.from("public").getPublicUrl(storageData.path);
 
-		const hashedPassword = bcrypt.hashSync(password, 10)
+		const hashedPassword = bcrypt.hashSync(password, 10);
 
 		const newUser = {
 			...user,
 			pictureUrl: publicUrl,
 			password: hashedPassword
-		}
+		};
 
-		await userRepository.create(newUser)
+		await userRepository.create(newUser);
 	} else {
-		throw error.unprocessableEntity('This type of file is not acceptable')
+		throw error.unprocessableEntity("This type of file is not acceptable");
 	}
 }
 
 async function findById(id: number) {
-	return await userRepository.findById(id)
+	return await userRepository.findById(id);
 }
 
 export const userService = {
 	createUser,
 	findById
-}
+};

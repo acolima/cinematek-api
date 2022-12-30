@@ -1,5 +1,5 @@
-import { Movie } from '@prisma/client'
-import { movieRepository } from '../repositories/movieRepository.js'
+import { Movie } from "@prisma/client";
+import { movieRepository } from "../repositories/movieRepository.js";
 
 async function upsertMovie(
 	userId: number,
@@ -7,43 +7,43 @@ async function upsertMovie(
 	action: string,
 	status: boolean
 ) {
-	const { tmdbId } = movieData
+	const { tmdbId } = movieData;
 
-	await movieRepository.findById(tmdbId)
+	await movieRepository.findById(tmdbId);
 
-	await movieRepository.upsert(movieData)
+	await movieRepository.upsert(movieData);
 
-	const userMovie = await movieRepository.getUserMovie(userId, tmdbId)
+	const userMovie = await movieRepository.getUserMovie(userId, tmdbId);
 
 	if (!userMovie) {
-		await movieRepository.createUserMovie(tmdbId, userId, action, status)
-		return
+		await movieRepository.createUserMovie(tmdbId, userId, action, status);
+		return;
 	}
 
 	const movieUpdated = await movieRepository.updateUserMovie(
 		userMovie.id,
 		action,
 		status
-	)
+	);
 
 	if (
 		!movieUpdated.favorite &&
 		!movieUpdated.watched &&
 		!movieUpdated.watchlist
 	)
-		await movieRepository.removeUserMovie(movieUpdated.id)
+		await movieRepository.removeUserMovie(movieUpdated.id);
 }
 
 async function getUserMovie(id: number, movieId: number) {
-	return await movieRepository.getUserMovie(id, movieId)
+	return await movieRepository.getUserMovie(id, movieId);
 }
 
 async function getMovies(id: number) {
-	return await movieRepository.getMovies(id)
+	return await movieRepository.getMovies(id);
 }
 
 async function getUserMovies(id: number, filter: string) {
-	return await movieRepository.getUserMovies(id, filter)
+	return await movieRepository.getUserMovies(id, filter);
 }
 
 export const movieService = {
@@ -51,4 +51,4 @@ export const movieService = {
 	getUserMovie,
 	getUserMovies,
 	upsertMovie
-}
+};

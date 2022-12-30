@@ -1,39 +1,39 @@
-import { Router } from 'express'
-import { listController } from '../controllers/listController.js'
-import { movieController } from '../controllers/movieController.js'
-import { userController } from '../controllers/userController.js'
-import { schemaValidation } from '../middlewares/schemaValidationMiddleware.js'
-import { tokenValidation } from '../middlewares/tokenValidationMiddleware.js'
-import { userSchema } from '../schemas/userSchema.js'
-import { upload } from '../storage.js'
+import { Router } from "express";
+import { listController } from "../controllers/listController.js";
+import { movieController } from "../controllers/movieController.js";
+import { userController } from "../controllers/userController.js";
+import { schemaValidation } from "../middlewares/schemaValidationMiddleware.js";
+import { tokenValidation } from "../middlewares/tokenValidationMiddleware.js";
+import { userSchema } from "../schemas/userSchema.js";
+import { upload } from "../storage.js";
 
-const userRouter = Router()
+const userRouter = Router();
 
 userRouter.post(
-	'/register',
-	upload.single('file'),
+	"/register",
+	upload.single("file"),
 	schemaValidation(userSchema),
 	userController.signUp
-)
+);
 
-userRouter.get('/movies/:movieId', tokenValidation, movieController.getMovie)
+userRouter.get("/movies/:movieId", tokenValidation, movieController.getMovie);
 
-userRouter.get('/movies', tokenValidation, movieController.getMovies)
+userRouter.get("/movies", tokenValidation, movieController.getMovies);
 
 userRouter.get(
-	'/movies/list/:filter',
+	"/movies/list/:filter",
 	tokenValidation,
 	movieController.getUserMovies
-)
+);
 
-userRouter.get('/lists', tokenValidation, listController.getLists)
+userRouter.get("/lists", tokenValidation, listController.getLists);
 
-userRouter.post('/lists/create', tokenValidation, listController.createList)
+userRouter.post("/lists/create", tokenValidation, listController.createList);
 
 userRouter.delete(
-	'/lists/:id/delete',
+	"/lists/:id/delete",
 	tokenValidation,
 	listController.deleteList
-)
+);
 
-export default userRouter
+export default userRouter;

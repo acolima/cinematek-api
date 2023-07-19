@@ -79,28 +79,28 @@ async function getUserMovies(id: number, filter: string) {
 		},
 		select: {
 			id: true,
-			movie: true
+			movie: true,
+			modifyAt: true,
+			watched: true
 		}
 	});
 }
 
 async function getMovies(id: number) {
-	return await prisma.userMovies.findMany({
-		where: {
-			userId: id
-		},
-		select: {
-			id: true,
-			favorite: true,
-			watchlist: true,
-			watched: true,
-			movie: true,
-			modifyAt: true
-		},
-		orderBy: {
-			modifyAt: "desc"
-		}
-	});
+	return prisma.$transaction([
+		prisma.userMovies.findMany({
+			where: { userId: id, watched: true },
+			select: { movie: true }
+		}),
+		prisma.userMovies.findMany({
+			where: { userId: id, watchlist: true },
+			select: { movie: true }
+		}),
+		prisma.userMovies.findMany({
+			where: { userId: id, favorite: true },
+			select: { movie: true }
+		})
+	]);
 }
 
 async function removeUserMovie(movieId: number) {

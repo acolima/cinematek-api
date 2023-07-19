@@ -39,7 +39,21 @@ async function getUserMovie(id: number, movieId: number) {
 }
 
 async function getMovies(id: number) {
-	return await movieRepository.getMovies(id);
+	const movies = await movieRepository.getMovies(id);
+
+	const watched = movies[0].map((m) => {
+		return m.movie;
+	});
+
+	const watchlist = movies[1].map((m) => {
+		return m.movie;
+	});
+
+	const favorite = movies[2].map((m) => {
+		return m.movie;
+	});
+
+	return { watched, watchlist, favorite };
 }
 
 async function getUserMovies(id: number, filter: string) {

@@ -1,10 +1,10 @@
-import { Movie } from '@prisma/client'
-import { prisma } from '../db.js'
+import { Movie } from "@prisma/client";
+import { prisma } from "../db.js";
 
 async function findById(id: number) {
 	return await prisma.movie.findFirst({
 		where: { tmdbId: id }
-	})
+	});
 }
 
 async function upsert(movieData: Movie) {
@@ -12,7 +12,7 @@ async function upsert(movieData: Movie) {
 		where: { tmdbId: movieData.tmdbId },
 		update: {},
 		create: movieData
-	})
+	});
 }
 
 async function findUserMovie(movieId: number, userId: number) {
@@ -21,7 +21,7 @@ async function findUserMovie(movieId: number, userId: number) {
 			movieId,
 			userId
 		}
-	})
+	});
 }
 
 async function createUserMovie(
@@ -36,11 +36,11 @@ async function createUserMovie(
 			userId,
 			[action]: status
 		}
-	})
+	});
 }
 
 async function updateUserMovie(id: number, action: string, status: boolean) {
-	if (action === 'watched') {
+	if (action === "watched") {
 		return await prisma.userMovies.update({
 			where: {
 				id
@@ -49,7 +49,7 @@ async function updateUserMovie(id: number, action: string, status: boolean) {
 				[action]: status,
 				modifyAt: new Date()
 			}
-		})
+		});
 	}
 
 	return await prisma.userMovies.update({
@@ -59,7 +59,7 @@ async function updateUserMovie(id: number, action: string, status: boolean) {
 		data: {
 			[action]: status
 		}
-	})
+	});
 }
 
 async function getUserMovie(id: number, movieId: number) {
@@ -68,7 +68,7 @@ async function getUserMovie(id: number, movieId: number) {
 			userId: id,
 			movieId: movieId
 		}
-	})
+	});
 }
 
 async function getUserMovies(id: number, filter: string) {
@@ -79,28 +79,28 @@ async function getUserMovies(id: number, filter: string) {
 		},
 		select: {
 			id: true,
-			movie: true
+			movie: true,
+			modifyAt: true,
+			watched: true
 		}
-	})
+	});
 }
 
 async function getMovies(id: number) {
-	return await prisma.userMovies.findMany({
-		where: {
-			userId: id
-		},
-		select: {
-			id: true,
-			favorite: true,
-			watchlist: true,
-			watched: true,
-			movie: true,
-			modifyAt: true
-		},
-		orderBy: {
-			modifyAt: 'desc'
-		}
-	})
+	return prisma.$transaction([
+		prisma.userMovies.findMany({
+			where: { userId: id, watched: true },
+			select: { movie: true }
+		}),
+		prisma.userMovies.findMany({
+			where: { userId: id, watchlist: true },
+			select: { movie: true }
+		}),
+		prisma.userMovies.findMany({
+			where: { userId: id, favorite: true },
+			select: { movie: true }
+		})
+	]);
 }
 
 async function removeUserMovie(movieId: number) {
@@ -108,7 +108,7 @@ async function removeUserMovie(movieId: number) {
 		where: {
 			id: movieId
 		}
-	})
+	});
 }
 
 export const movieRepository = {
@@ -121,4 +121,4 @@ export const movieRepository = {
 	removeUserMovie,
 	updateUserMovie,
 	upsert
-}
+};

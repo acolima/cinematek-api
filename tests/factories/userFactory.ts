@@ -1,7 +1,7 @@
-import bcrypt from 'bcrypt'
+import bcrypt from "bcrypt";
 
-import { prisma } from '../../src/db.js'
-import { CreateUser } from '../../src/services/userService.js'
+import { prisma } from "../../src/db.js";
+import { CreateUser } from "../../src/services/userService.js";
 
 export async function userFactory(user: CreateUser) {
 	return await prisma.user.create({
@@ -9,5 +9,5 @@ export async function userFactory(user: CreateUser) {
 			...user,
 			password: bcrypt.hashSync(user.password, 10)
 		}
-	})
+	});
 }

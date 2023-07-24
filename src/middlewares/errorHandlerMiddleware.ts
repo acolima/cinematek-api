@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express'
-import { AppError } from '../utils/errorUtils.js'
+import { Request, Response, NextFunction } from "express";
+import { AppError } from "../utils/errorUtils.js";
 
 export default function errorHandler(
 	error: Error | AppError,
@@ -7,21 +7,21 @@ export default function errorHandler(
 	res: Response,
 	next: NextFunction
 ) {
-	console.log(error)
+	console.log(error);
 
-	if ('type' in error) {
+	if ("type" in error) {
 		switch (error.type) {
-			case 'unprocessable_entity':
-				return res.status(422).send(error.message)
-			case 'conflict':
-				return res.status(409).send(error.message)
-			case 'unauthorized':
-				return res.status(401).send(error.message)
-			case 'not_found':
-				return res.status(404).send(error.message)
-			case 'storage_error':
-				return res.status(500).send(error.message)
+			case "unprocessable_entity":
+				return res.status(422).send(error.message);
+			case "conflict":
+				return res.status(409).send(error.message);
+			case "unauthorized":
+				return res.status(401).send(error.message);
+			case "not_found":
+				return res.status(404).send(error.message);
+			case "storage_error":
+				return res.status(500).send(error.message);
 		}
 	}
-	res.sendStatus(500)
+	res.sendStatus(500);
 }

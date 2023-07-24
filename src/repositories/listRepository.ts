@@ -1,4 +1,4 @@
-import { prisma } from '../db.js'
+import { prisma } from "../db.js";
 
 async function getLists(userId: number) {
 	return await prisma.list.findMany({
@@ -14,7 +14,7 @@ async function getLists(userId: number) {
 				}
 			}
 		}
-	})
+	});
 }
 
 async function findListById(listId: number) {
@@ -22,9 +22,9 @@ async function findListById(listId: number) {
 		where: {
 			id: listId
 		}
-	})
+	});
 
-	return list
+	return list;
 }
 
 async function createList(userId: number, name: string) {
@@ -33,9 +33,9 @@ async function createList(userId: number, name: string) {
 			name,
 			userId
 		}
-	})
+	});
 
-	return list
+	return list;
 }
 
 async function addMovieToList(listId: number, movieId: number) {
@@ -44,7 +44,7 @@ async function addMovieToList(listId: number, movieId: number) {
 			listId,
 			movieId
 		}
-	})
+	});
 }
 
 async function deleteList(id: number) {
@@ -52,7 +52,7 @@ async function deleteList(id: number) {
 		where: {
 			id
 		}
-	})
+	});
 }
 
 export const listRepository = {
@@ -61,4 +61,4 @@ export const listRepository = {
 	deleteList,
 	findListById,
 	getLists
-}
+};

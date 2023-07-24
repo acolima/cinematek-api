@@ -9,11 +9,13 @@ jobs:
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1
         with:
-          envkey_POSTGRES_USER: 'postgres'
-          envkey_POSTGRES_PASSWORD: '123456'
-          envkey_POSTGRES_DB: 'cinematek_tests'
-          envkey_DATABASE_URL: 'postgres://postgres:123456@db:5432/cinematek_tests'
-          envkey_JWT_SECRET: 'teste'
+          envkey_POSTGRES_USER: "postgres"
+          envkey_POSTGRES_PASSWORD: "123456"
+          envkey_POSTGRES_DB: "cinematek_tests"
+          envkey_DATABASE_URL: "postgres://postgres:123456@db:5432/cinematek_tests"
+          envkey_JWT_SECRET: "teste"
+          envkey_SUPABASE_URL: "https://nawjjlvokdkyxmwmewmp.supabase.co"
+          envkey_SUPASE_KEY: "teste"
           file_name: .env.test
       - name: Run tests
         run: docker-compose -f docker-compose-test.yml run node_app npm run test

@@ -15,7 +15,7 @@ jobs:
           envkey_DATABASE_URL: "postgres://postgres:123456@db:5432/cinematek_tests"
           envkey_JWT_SECRET: "teste"
           envkey_SUPABASE_URL: "https://nawjjlvokdkyxmwmewmp.supabase.co"
-          envkey_SUPASE_KEY: "teste"
+          envkey_SUPABASE_KEY: "teste"
           file_name: .env.test
       - name: Run tests
         run: docker-compose -f docker-compose-test.yml run node_app npm run test
